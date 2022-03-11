@@ -6,6 +6,7 @@ let statusField = undefined;
 let typeLabel = undefined;
 let type = undefined;
 let lang = undefined;
+let offset = 0;
 let imageProgress = 0;
 
 String.prototype.trunc = String.prototype.trunc ||
@@ -233,7 +234,7 @@ function runDataQuery(restriction, lang) {
         ?item wikibase:statements ?statements.
       }
       ORDER BY DESC(?statements)
-      LIMIT 100
+      LIMIT 100 OFFSET ${offset}
     } AS %items
     WHERE {
       INCLUDE %items.
@@ -381,6 +382,7 @@ function submitQuery(e) {
 window.onload = function() {
     var searchParams = new URLSearchParams(window.location.search)
     lang = searchParams.get("lang") || "en";
+    offset = searchParams.get("offset") || "0";
     var match = window.location.search.match(/Q\d+/g);
     type = match && match[0] || "Q11344";
 
